@@ -4,12 +4,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header>
-    <div class="p-3">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/my-viewing-log">鑑賞記録</RouterLink>
-      </nav>
-    </div>
+    <div class="p-3">ヘッダー</div>
   </header>
 
   <RouterView />
