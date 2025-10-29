@@ -18,7 +18,7 @@ const isLoading = ref(true)
 
 const apiKey = import.meta.env.VITE_TMDB_API_KEY
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'
-const IMAGE_SIZE = 'w185'
+const IMAGE_SIZE = 'w500'
 
 const tmdbApi = axios.create({
   baseURL: 'https://api.themoviedb.org/3',
@@ -91,15 +91,29 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-for="recentMovieInfo in recentMovieInfos">
-    <img
-      :src="
-        recentMovieInfo.poster_path
-          ? `${IMAGE_BASE_URL}/${IMAGE_SIZE}${recentMovieInfo.poster_path}`
-          : ''
-      "
-      :alt="recentMovieInfo.title"
-    />
+  <h1 class="my-3 text-2xl">Now Playing</h1>
+  <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5">
+    <RouterLink
+      v-for="recentMovieInfo in recentMovieInfos"
+      :key="recentMovieInfo.id"
+      :to="`/movie/${recentMovieInfo.id}`"
+      class="rounded-sm bg-[#f49895] p-3 text-[#232323] shadow-md"
+    >
+      <div class="aspect-[2/3] w-full overflow-hidden rounded-sm bg-gray-300">
+        <img
+          class="h-full w-full object-cover transition-transform hover:scale-105"
+          :src="
+            recentMovieInfo.poster_path
+              ? `${IMAGE_BASE_URL}/${IMAGE_SIZE}${recentMovieInfo.poster_path}`
+              : ''
+          "
+          :alt="recentMovieInfo.title"
+        />
+      </div>
+      <div class="mt-2">
+        <p class="line-clamp-2 min-h-[2.5rem] text-sm font-bold">{{ recentMovieInfo.title }}</p>
+        <p class="mt-1 text-xs text-gray-700">{{ recentMovieInfo.release_date }}公開</p>
+      </div>
+    </RouterLink>
   </div>
-  <RouterLink to="/movie/:id">映画詳細</RouterLink>
 </template>
