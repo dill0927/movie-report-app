@@ -76,12 +76,12 @@ watch(
 </script>
 
 <template>
-  <div class="text-center">
+  <div class="mt-10 mb-20 text-center">
     <h1 class="my-3 text-2xl">Search Movie ↓</h1>
     <input
       v-model="searchInput"
       @keydown.enter="handleSearch"
-      class="w-[70%] rounded-sm bg-[#f49895] px-3 py-2 text-[#232323] outline-none"
+      class="w-[70%] rounded-sm bg-primary px-3 py-3 text-secondary outline-none"
       type="text"
       placeholder="映画のタイトルを入力してEnter"
     />
@@ -100,7 +100,7 @@ watch(
       v-for="movie in moviesToDisplay"
       :key="movie.id"
       :to="`/movie/${movie.id}`"
-      class="rounded-sm bg-[#f49895] p-3 text-[#232323] shadow-md"
+      class="rounded-sm bg-primary p-3 text-secondary"
     >
       <div class="aspect-[2/3] w-full overflow-hidden rounded-sm bg-gray-300">
         <img
