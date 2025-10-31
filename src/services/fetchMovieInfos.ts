@@ -1,4 +1,4 @@
-import type { MovieInfo } from '@/type/MovieInfo'
+import type { MovieDetailInfo, MovieInfo } from '@/type/MovieInfo'
 import axios from 'axios'
 import type { Ref } from 'vue'
 
@@ -43,8 +43,6 @@ export const fetchMovieInfos = async (
     const movieInfos: MovieInfo[] = response.data.results.map((movie: MovieInfo) => ({
       id: movie.id,
       title: movie.title,
-      overview: movie.overview,
-      genre_ids: movie.genre_ids,
       poster_path: movie.poster_path,
       release_date: movie.release_date,
     }))
@@ -64,6 +62,56 @@ export const fetchMovieInfos = async (
     }
     console.error('Error fetching movies:', e)
     return []
+  } finally {
+    isLoading.value = false
+  }
+}
+
+export const fetchMovieDetailInfos = async (
+  movieId: number,
+  error: ErrorRef,
+  isLoading: IsLoadingRef,
+): Promise<MovieDetailInfo | null> => {
+  error.value = null
+  isLoading.value = true
+
+  try {
+    const [movieDetails, movieCredits] = await Promise.all([
+      tmdbApi.get(`/movie/${movieId}`),
+      tmdbApi.get(`/movie/${movieId}/credits`),
+    ])
+
+    if (!movieDetails.data || !movieCredits.data) {
+      throw new Error('APIからデータを取得できませんでした')
+    }
+
+    const movieDetailInfo: MovieDetailInfo = {
+      id: movieDetails.data.id,
+      title: movieDetails.data.title,
+      poster_path: movieDetails.data.poster_path,
+      release_date: movieDetails.data.release_date,
+      genres: movieDetails.data.genres,
+      homepage: movieDetails.data.homepage,
+      overview: movieDetails.data.overview,
+      production_countries: movieDetails.data.production_countries,
+      cast: movieCredits.data.cast?.slice(0, 5) || [],
+    }
+
+    return movieDetailInfo
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      if (e.response?.status === 401) {
+        error.value = e instanceof Error ? e : new Error('API認証に失敗しました')
+      } else if (e.response?.status === 404) {
+        error.value = e instanceof Error ? e : new Error('リソースが見つかりませんでした')
+      } else {
+        error.value = e instanceof Error ? e : new Error('APIリクエストに失敗しました')
+      }
+    } else {
+      error.value = e instanceof Error ? e : new Error('予期せぬエラーが発生しました')
+    }
+    console.error('Error fetching movies:', e)
+    return null
   } finally {
     isLoading.value = false
   }

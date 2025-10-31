@@ -7,9 +7,15 @@ import App from './App.vue'
 import router from './router'
 
 import { OhVueIcon, addIcons } from 'oh-vue-icons'
-import { IoHomeSharp, GiBackwardTime } from 'oh-vue-icons/icons'
+import {
+  IoHomeSharp,
+  GiBackwardTime,
+  IoCloseSharp,
+  BiPeopleFill,
+  BiLink45Deg,
+} from 'oh-vue-icons/icons'
 
-addIcons(IoHomeSharp, GiBackwardTime)
+addIcons(IoHomeSharp, GiBackwardTime, IoCloseSharp, BiPeopleFill, BiLink45Deg)
 
 const app = createApp(App)
 
