@@ -3,7 +3,7 @@ import { fetchMovieDetailInfos, fetchMovieInfos } from '@/services/fetchMovieInf
 import type { MovieDetailInfo, MovieInfo } from '@/type/MovieInfo'
 import { computed, ref, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
-import Modal from '@/components/ui/Modal.vue'
+import Modal from '@/components/ui/CommonModal.vue'
 import { formatDate } from '@/utils/date'
 
 const route = useRoute()
@@ -141,7 +141,7 @@ watch(
       </div>
       <div class="mt-2">
         <p class="line-clamp-2 min-h-[2.5rem] text-sm font-bold">{{ movie.title }}</p>
-        <p class="mt-1 text-xs text-gray-700">{{ formatDate(movie.release_date) }}公開</p>
+        <p class="mt-1 text-xs text-gray-300">{{ formatDate(movie.release_date) }}公開</p>
       </div>
     </RouterLink>
   </div>
@@ -171,6 +171,7 @@ watch(
             <div
               v-for="genre in viewedMovieDetailInfo.genres"
               class="rounded-sm bg-secondary p-0.5 text-xs whitespace-nowrap text-primary"
+              :key="genre.id"
             >
               {{ genre.name }}
             </div>
@@ -182,7 +183,9 @@ watch(
             <div class="flex gap-2">
               <v-icon name="bi-people-fill" />
               <div class="flex flex-wrap gap-1">
-                <span v-for="cast in viewedMovieDetailInfo.cast">{{ cast.name }}</span>
+                <span v-for="cast in viewedMovieDetailInfo.cast" :key="cast.name">{{
+                  cast.name
+                }}</span>
               </div>
             </div>
             <div class="flex gap-2">
