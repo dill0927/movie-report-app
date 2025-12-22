@@ -12,7 +12,7 @@ import { RouterLink, RouterView } from 'vue-router'
       </RouterLink>
       <nav class="flex gap-4 justify-self-end">
         <RouterLink to="/"><v-icon name="io-home-sharp" /></RouterLink>
-        <RouterLink to="/movie/log"><v-icon name="gi-backward-time" scale="1.5" /></RouterLink>
+        <RouterLink to="/log"><v-icon name="gi-backward-time" scale="1.5" /></RouterLink>
       </nav>
     </header>
     <div class="grow bg-secondary p-4 text-primary">

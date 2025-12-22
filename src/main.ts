@@ -13,9 +13,10 @@ import {
   IoCloseSharp,
   BiPeopleFill,
   BiLink45Deg,
+  HiSolidPlusCircle,
 } from 'oh-vue-icons/icons'
 
-addIcons(IoHomeSharp, GiBackwardTime, IoCloseSharp, BiPeopleFill, BiLink45Deg)
+addIcons(IoHomeSharp, GiBackwardTime, IoCloseSharp, BiPeopleFill, BiLink45Deg, HiSolidPlusCircle)
 
 const app = createApp(App)
 

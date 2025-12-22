@@ -19,7 +19,7 @@ watch(
   <Transition name="modal">
     <div
       v-if="show"
-      class="fixed inset-0 z-9998 flex items-center justify-center overflow-y-auto bg-gray-50/50 transition-opacity"
+      class="fixed inset-0 z-1001 flex items-center justify-center overflow-y-auto bg-gray-50/50 transition-opacity"
     >
       <div
         class="modal-container my-8 flex max-h-[90vh] w-2/3 flex-col overflow-hidden rounded-sm bg-primary text-secondary shadow-xl transition-all"

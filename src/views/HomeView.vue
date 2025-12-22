@@ -5,6 +5,7 @@ import { computed, ref, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import Modal from '@/components/ui/CommonModal.vue'
 import { formatDate } from '@/utils/date'
+import { POSTER } from '@/constants/movieData'
 
 const route = useRoute()
 const router = useRouter()
@@ -16,9 +17,6 @@ const error = ref<Error | null>(null)
 const isLoading = ref(true)
 const isLoadingModalData = ref(true)
 const searchInput = ref<string>('')
-
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'
-const IMAGE_SIZE = 'w500'
 
 const moviesToDisplay = computed(() => {
   if (route.query.q) {
@@ -54,6 +52,16 @@ const handleSearch = () => {
   } else {
     router.push({ query: {} })
   }
+}
+
+const navigateToAddLog = (movie: MovieInfo) => {
+  router.push({
+    path: `/log/add/${movie.id}`,
+    state: {
+      title: movie.title,
+      posterPath: movie.poster_path,
+    },
+  })
 }
 
 watch(
@@ -130,18 +138,26 @@ watch(
       v-for="movie in moviesToDisplay"
       :key="movie.id"
       :to="{ query: { ...route.query, viewMovie: movie.id } }"
-      class="rounded-sm bg-primary p-3 text-secondary"
+      class="relative rounded-sm bg-primary p-3 text-secondary"
     >
-      <div class="aspect-[2/3] w-full overflow-hidden rounded-sm bg-gray-300">
-        <img
-          class="h-full w-full object-cover transition-transform hover:scale-105"
-          :src="movie.poster_path ? `${IMAGE_BASE_URL}/${IMAGE_SIZE}${movie.poster_path}` : ''"
-          :alt="movie.title"
-        />
-      </div>
-      <div class="mt-2">
-        <p class="line-clamp-2 min-h-[2.5rem] text-sm font-bold">{{ movie.title }}</p>
-        <p class="mt-1 text-xs text-gray-300">{{ formatDate(movie.release_date) }}公開</p>
+      <button
+        @click.stop.prevent="navigateToAddLog(movie)"
+        class="absolute top-0 right-1 z-999 cursor-pointer rounded-b-sm border border-gray-800 bg-white"
+      >
+        <v-icon name="hi-solid-plus-circle" scale="1.5" fill="black" />
+      </button>
+      <div>
+        <div class="aspect-[2/3] w-full overflow-hidden rounded-sm bg-gray-300">
+          <img
+            class="h-full w-full object-cover transition-transform hover:scale-105"
+            :src="movie.poster_path ? `${POSTER.BASE_URL}/${POSTER.SIZE}${movie.poster_path}` : ''"
+            :alt="movie.title"
+          />
+        </div>
+        <div class="mt-2">
+          <p class="line-clamp-2 min-h-[2.5rem] text-sm font-bold">{{ movie.title }}</p>
+          <p class="mt-1 text-xs text-gray-300">{{ formatDate(movie.release_date) }}公開</p>
+        </div>
       </div>
     </RouterLink>
   </div>
@@ -156,7 +172,7 @@ watch(
             class="h-full w-full object-cover"
             :src="
               viewedMovieDetailInfo.poster_path
-                ? `${IMAGE_BASE_URL}/${IMAGE_SIZE}${viewedMovieDetailInfo.poster_path}`
+                ? `${POSTER.BASE_URL}/${POSTER.SIZE}${viewedMovieDetailInfo.poster_path}`
                 : ''
             "
             :alt="viewedMovieDetailInfo.title"
