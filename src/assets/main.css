@@ -1,9 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p&family=Montserrat+Alternates:wght@100;200;300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p&family=Montserrat+Alternates:wght@100;200;300;400;500;600&family=Orbitron:wght@300;400;500;600;700;800;900&display=swap');
 @import 'tailwindcss';
 
 @theme {
   --font-sans: 'M PLUS 1p', 'sans-serif';
   --font-logo: 'Montserrat Alternates', 'sans-serif';
+  --font-date: 'Orbitron', 'sans-serif';
   --color-primary: #313131;
   --color-secondary: #fdfdfd;
+  --color-accent: #efb100;
 }

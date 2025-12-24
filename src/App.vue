@@ -3,9 +3,9 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col align-middle">
+  <div class="flex h-screen flex-col overflow-hidden align-middle">
     <header
-      class="sticky top-0 z-1000 grid grid-cols-2 bg-primary px-5 py-4 font-sans text-secondary"
+      class="sticky top-0 z-1000 grid flex-shrink-0 grid-cols-2 bg-primary px-5 py-4 font-sans text-secondary"
     >
       <RouterLink to="/">
         <div class="font-logo text-xl font-bold">M-LOG</div>
@@ -15,7 +15,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/log"><v-icon name="gi-backward-time" scale="1.5" /></RouterLink>
       </nav>
     </header>
-    <div class="grow bg-secondary p-4 text-primary">
+    <div class="flex flex-1 flex-col overflow-hidden bg-secondary p-4 text-primary">
       <RouterView />
     </div>
   </div>

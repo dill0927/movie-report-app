@@ -114,113 +114,117 @@ watch(
 </script>
 
 <template>
-  <div class="mt-10 mb-20 text-center">
-    <h1 class="my-3 text-2xl">Search Movie ↓</h1>
-    <input
-      v-model="searchInput"
-      @keydown.enter="handleSearch"
-      class="w-[70%] rounded-sm bg-primary px-3 py-3 text-secondary outline-none"
-      type="text"
-      placeholder="映画のタイトルを入力してEnter"
-    />
-  </div>
-  <h1 class="my-3 text-2xl">{{ listTitle }}</h1>
+  <div class="h-full overflow-y-auto">
+    <div class="mt-10 mb-20 text-center">
+      <h1 class="my-3 text-2xl">Search Movie ↓</h1>
+      <input
+        v-model="searchInput"
+        @keydown.enter="handleSearch"
+        class="w-[70%] rounded-sm bg-primary px-3 py-3 text-secondary outline-none"
+        type="text"
+        placeholder="映画のタイトルを入力してEnter"
+      />
+    </div>
+    <h1 class="my-3 text-2xl">{{ listTitle }}</h1>
 
-  <div v-if="isLoading" class="text-center">ローディング中...</div>
+    <div v-if="isLoading" class="text-center">ローディング中...</div>
 
-  <div v-if="error" class="text-center text-red-500">{{ error.message }}</div>
+    <div v-if="error" class="text-center text-red-500">{{ error.message }}</div>
 
-  <div
-    v-if="!isLoading && moviesToDisplay.length > 0"
-    class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
-  >
-    <RouterLink
-      v-for="movie in moviesToDisplay"
-      :key="movie.id"
-      :to="{ query: { ...route.query, viewMovie: movie.id } }"
-      class="relative rounded-sm bg-primary p-3 text-secondary"
+    <div
+      v-if="!isLoading && moviesToDisplay.length > 0"
+      class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
     >
-      <button
-        @click.stop.prevent="navigateToAddLog(movie)"
-        class="absolute top-0 right-1 z-999 cursor-pointer rounded-b-sm border border-gray-800 bg-white"
+      <RouterLink
+        v-for="movie in moviesToDisplay"
+        :key="movie.id"
+        :to="{ query: { ...route.query, viewMovie: movie.id } }"
+        class="relative rounded-sm bg-primary p-3 text-secondary"
       >
-        <v-icon name="hi-solid-plus-circle" scale="1.5" fill="black" />
-      </button>
-      <div>
-        <div class="aspect-[2/3] w-full overflow-hidden rounded-sm bg-gray-300">
-          <img
-            class="h-full w-full object-cover transition-transform hover:scale-105"
-            :src="movie.poster_path ? `${POSTER.BASE_URL}/${POSTER.SIZE}${movie.poster_path}` : ''"
-            :alt="movie.title"
-          />
-        </div>
-        <div class="mt-2">
-          <p class="line-clamp-2 min-h-[2.5rem] text-sm font-bold">{{ movie.title }}</p>
-          <p class="mt-1 text-xs text-gray-300">{{ formatDate(movie.release_date) }}公開</p>
-        </div>
-      </div>
-    </RouterLink>
-  </div>
-
-  <Teleport to="body">
-    <Modal :show="showModal" @close="closeModal">
-      <div v-if="isLoadingModalData" class="text-center">ローディング中...</div>
-      <div v-if="error" class="text-center text-red-500">{{ error.message }}</div>
-      <div v-if="viewedMovieDetailInfo" class="gap-4 sm:grid sm:grid-cols-10">
-        <div class="aspect-[2/3] w-full overflow-hidden bg-gray-300 sm:col-span-4">
-          <img
-            class="h-full w-full object-cover"
-            :src="
-              viewedMovieDetailInfo.poster_path
-                ? `${POSTER.BASE_URL}/${POSTER.SIZE}${viewedMovieDetailInfo.poster_path}`
-                : ''
-            "
-            :alt="viewedMovieDetailInfo.title"
-          />
-        </div>
-        <div class="sm:col-span-6">
-          <h1 class="inline text-lg font-bold">{{ viewedMovieDetailInfo.title }}</h1>
-          <span class="ml-2 text-xs text-gray-200 italic">{{
-            viewedMovieDetailInfo.production_countries[0]?.name
-          }}</span>
-          <div class="my-1 flex flex-wrap gap-1">
-            <div
-              v-for="genre in viewedMovieDetailInfo.genres"
-              class="rounded-sm bg-secondary p-0.5 text-xs whitespace-nowrap text-primary"
-              :key="genre.id"
-            >
-              {{ genre.name }}
-            </div>
+        <button
+          @click.stop.prevent="navigateToAddLog(movie)"
+          class="absolute top-0 right-1 z-999 cursor-pointer rounded-b-sm border border-gray-800 bg-white"
+        >
+          <v-icon name="hi-solid-plus-circle" scale="1.5" fill="black" />
+        </button>
+        <div>
+          <div class="aspect-[2/3] w-full overflow-hidden rounded-sm bg-gray-300">
+            <img
+              class="h-full w-full object-cover transition-transform hover:scale-105"
+              :src="
+                movie.poster_path ? `${POSTER.BASE_URL}/${POSTER.SIZE}${movie.poster_path}` : ''
+              "
+              :alt="movie.title"
+            />
           </div>
-          <div class="flex flex-col gap-2 text-xs">
-            <div class="mt-5 pr-2">
-              <p class="whitespace-pre-wrap">{{ viewedMovieDetailInfo.overview }}</p>
-            </div>
-            <div class="flex gap-2">
-              <v-icon name="bi-people-fill" />
-              <div class="flex flex-wrap gap-1">
-                <span v-for="cast in viewedMovieDetailInfo.cast" :key="cast.name">{{
-                  cast.name
-                }}</span>
+          <div class="mt-2">
+            <p class="line-clamp-2 min-h-[2.5rem] text-sm font-bold">{{ movie.title }}</p>
+            <p class="mt-1 text-xs text-gray-300">{{ formatDate(movie.release_date) }}公開</p>
+          </div>
+        </div>
+      </RouterLink>
+    </div>
+
+    <Teleport to="body">
+      <Modal :show="showModal" @close="closeModal">
+        <div v-if="isLoadingModalData" class="text-center">ローディング中...</div>
+        <div v-if="error" class="text-center text-red-500">{{ error.message }}</div>
+        <div v-if="viewedMovieDetailInfo" class="gap-4 sm:grid sm:grid-cols-10">
+          <div class="aspect-[2/3] w-full overflow-hidden bg-gray-300 sm:col-span-4">
+            <img
+              class="h-full w-full object-cover"
+              :src="
+                viewedMovieDetailInfo.poster_path
+                  ? `${POSTER.BASE_URL}/${POSTER.SIZE}${viewedMovieDetailInfo.poster_path}`
+                  : ''
+              "
+              :alt="viewedMovieDetailInfo.title"
+            />
+          </div>
+          <div class="sm:col-span-6">
+            <h1 class="inline text-lg font-bold">{{ viewedMovieDetailInfo.title }}</h1>
+            <span class="ml-2 text-xs text-gray-200 italic">{{
+              viewedMovieDetailInfo.production_countries[0]?.name
+            }}</span>
+            <div class="my-1 flex flex-wrap gap-1">
+              <div
+                v-for="genre in viewedMovieDetailInfo.genres"
+                class="rounded-sm bg-secondary p-0.5 text-xs whitespace-nowrap text-primary"
+                :key="genre.id"
+              >
+                {{ genre.name }}
               </div>
             </div>
-            <div class="flex gap-2">
-              <v-icon name="bi-link-45deg" class="shrink-0" />
-              <template v-if="viewedMovieDetailInfo.homepage">
-                <a
-                  :href="viewedMovieDetailInfo.homepage"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="break-all hover:text-blue-400 hover:underline"
-                  >{{ viewedMovieDetailInfo.homepage }}</a
-                >
-              </template>
-              <template v-else>ー</template>
+            <div class="flex flex-col gap-2 text-xs">
+              <div class="mt-5 pr-2">
+                <p class="whitespace-pre-wrap">{{ viewedMovieDetailInfo.overview }}</p>
+              </div>
+              <div class="flex gap-2">
+                <v-icon name="bi-people-fill" />
+                <div class="flex flex-wrap gap-1">
+                  <span v-for="cast in viewedMovieDetailInfo.cast" :key="cast.name">{{
+                    cast.name
+                  }}</span>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <v-icon name="bi-link-45deg" class="shrink-0" />
+                <template v-if="viewedMovieDetailInfo.homepage">
+                  <a
+                    :href="viewedMovieDetailInfo.homepage"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="break-all hover:text-blue-400 hover:underline"
+                    >{{ viewedMovieDetailInfo.homepage }}</a
+                  >
+                </template>
+                <template v-else>ー</template>
+              </div>
+              <p>{{ formatDate(viewedMovieDetailInfo.release_date) }}公開</p>
             </div>
-            <p>{{ formatDate(viewedMovieDetailInfo.release_date) }}公開</p>
           </div>
         </div>
-      </div>
-    </Modal>
-  </Teleport>
+      </Modal>
+    </Teleport>
+  </div>
 </template>

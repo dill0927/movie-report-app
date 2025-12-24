@@ -137,7 +137,7 @@ const handleCancel = () => {
             type="submit"
             @click="handleSubmit"
             :disabled="!canSubmit"
-            class="flex-1 rounded-sm bg-yellow-500 px-6 py-3 text-secondary transition-colors hover:bg-yellow-700"
+            class="flex-1 rounded-sm bg-accent px-6 py-3 text-secondary transition-colors hover:bg-yellow-700"
           >
             保存
           </button>
